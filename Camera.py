@@ -126,14 +126,14 @@ while True:
 
 # while not recording, check if stop button is pressed, wait 10 seconds, of pressed the whole time
 #  then blink LED rapidly 10 times and execute system shutdown.
-if GPIO.input(STOP_BTTN) == False:
-    start = time.time()
-    while GPIO.input(STOP_BTTN) == False:
-        elapsed = time.time() - start
-        if elapsed > 10:
-            LED_BLINK(10,.05)
-            subprocess.call("/home/pi/shutdown.sh", shell=True)
-        time.sleep(0.001)
+    if GPIO.input(STOP_BTTN) == False:
+        start = time.time()
+        while GPIO.input(STOP_BTTN) == False:
+            elapsed = time.time() - start
+            if elapsed > 10:
+                LED_BLINK(10,.05)
+                subprocess.call("/home/pi/shutdown.sh", shell=True)
+            time.sleep(0.001)
 
 
 
