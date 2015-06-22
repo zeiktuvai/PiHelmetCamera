@@ -20,9 +20,7 @@ import multiprocessing
 from multiprocessing import Queue
 import xbeeRf
 import pymedia
-                                                    # import pygame
-                                                    #from serial import Serial
-                                                    #from xbee import XBee
+
 
 # define GPIO pin variables
 START_BTTN = 21
@@ -49,6 +47,21 @@ def LED_BLINK(NUM, INTERVAL):
        count += 1
    
 
+def startRecording() :
+    if cam.getCamRecord == False :
+        if cam.startCamRec() :
+            xbee.sndXbeeMsg('\x00\x00','SR')
+            LED("ON")
+    time.sleep(1)
+    
+
+def stopRecording() :
+    if cam.getCamRecord() :
+        if cam.stopCamRec() :
+            xbee.sndXbeeMsg('\x00\x00','ER')
+            LED("OFF")
+
+
 # setup GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -72,27 +85,14 @@ if cam.getCamState() :
 
 
 
-global KeepGoing
-KeepGoing = False
-global recordFlag
-recordFlag = False
-
-def startRecording() :
-    if cam.getCamRecord == False :
-        if cam.startCamRec() :
-            xbee.sndXbeeMsg('\x00\x00','SR')
-            LED("ON")
-    time.sleep(1)
-    
-
-def stopRecording() :
-    if cam.getCamRecord() :
-        if cam.stopCamRec() :
-            xbee.sndXbeeMsg('\x00\x00','ER')
-            LED("OFF")
+#global KeepGoing
+#KeepGoing = False
+#global recordFlag
+#recordFlag = False
 
 
-# Main loop (NOT FINISHED BELOW)
+
+# Main loop
 while True:
 
     if not q.empty() :

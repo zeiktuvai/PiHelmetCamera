@@ -1,12 +1,12 @@
 ﻿#!/usr/bin/env python
-#title           :headcam.py
-#description     :Script for controlling raspberry pi camera and audio with GPIO buttons and RF
+#title           :pymedia.py
+#description     :Script for controlling raspberry pi camera and audio
 #author          :G. Rozzo
 #date            :20150621
 #version         :1.0
 #usage           :
 #notes           :
-#python_version  :3.2  
+#python_version  :2.7 
 #==============================================================================
 
 import time
@@ -24,10 +24,8 @@ class pycamera :
     
     def __init__(self, path, rotate, frame, resolution, bitrate) :
 
-        # define path for storing recorded video
+        # define path for videos and camera properties
         self.VIDEO_PATH = path
-
-        # Camera properties
         self.VIDEO_FRAMERATE  = frame
         if rotate == True :
             self.VIDEO_ROTATE = 180
@@ -76,8 +74,8 @@ class pycamera :
             state = True
         return state
 
-    def __GetFileName(self):
     # Generates a filename with timestamp
+    def __GetFileName(self):
         filename = time.strftime("%Y%m%d_%H%M%S", time.gmtime())
         return filename
 
@@ -88,8 +86,7 @@ class pycamera :
         return timestamp
 
 
-    def startCamRec(self) :
-    
+    def startCamRec(self) :    
         filename = self.__GetFileName()
                    
         # get new name for audio file
