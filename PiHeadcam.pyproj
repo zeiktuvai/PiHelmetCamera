@@ -26,6 +26,9 @@
     <Compile Include="headcam.py" />
     <Compile Include="Camera.py" />
     <Compile Include="AudioDev.py" />
+    <Compile Include="module1.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="pymedia.py">
       <SubType>Code</SubType>
     </Compile>

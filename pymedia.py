@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+﻿#!/usr/bin/env python
 #title           :headcam.py
 #description     :Script for controlling raspberry pi camera and audio with GPIO buttons and RF
 #author          :G. Rozzo
@@ -58,7 +58,7 @@ class pycamera :
         print(self.VIDEO_PATH)
         print(self.VIDEO_RESOLUTION)
  
-
+    #Get state of camera, Returns true if camera object open, false if camera closed.
     def getCamState(self) :
         state = True
         try :
@@ -67,7 +67,7 @@ class pycamera :
             state = False
         return state
 
-
+    #Check if camera is recording, if it is return True, if not return False
     def getCamRecord(self) :
         state = False
         try :
@@ -105,7 +105,7 @@ class pycamera :
         self.camera.start_recording(os.path.join(self.VIDEO_PATH,filename + '.h264'), format='h264', bitrate=self.VIDEO_BITRATE)
         # kick off subprocess for recording audio
         self.p = subprocess.Popen(record, stdout=subprocess.PIPE)
-        return stamp
+        return True
 
 
     def stopCamRec(self) :
@@ -113,6 +113,15 @@ class pycamera :
         os.kill(self.p.pid, signal.SIGTERM)
         self.camera.stop_recording()  
         return True
+
+    #calls wait_recording method, if an error occurs during recording, returns false.
+    def waitRecording(self, secs) :
+        state = True
+        try :
+            self.camera.wait_recording(secs)
+        except :
+            state = False
+        return state
 
 
 
