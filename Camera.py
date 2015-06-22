@@ -57,7 +57,7 @@ VIDEO_RESOLUTION = (1920, 1080)
 VIDEO_BITRATE = 8000000
 
 #define serial port for xbee
-port = '/dev/ttyUSB0'
+port = '/dev/ttyAMA0'
 baudrate = 9600
 serial = Serial(port, baudrate)
 xbee = XBee(serial)
