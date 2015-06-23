@@ -3,7 +3,7 @@
 #description     :Script for controlling raspberry pi camera and audio with GPIO buttons and RF
 #author          :G. Rozzo
 #date            :20150621
-#version         :1.1
+#version         :1.1.1
 #usage           :
 #notes           :
 #python_version  :2.7  
@@ -21,6 +21,7 @@ from multiprocessing import Queue
 import xbeeRf
 import pymedia
 
+address = ('\x00\x00',)
 
 # define GPIO pin variables
 START_BTTN = 21
@@ -101,6 +102,9 @@ while True:
           xbee.sndXbeeMsg('\x00\x00','CC')
        if cmd == 'gcp' :
           cam.getCamProperties()
+       if cmd == 'gcs' :
+          if cam.getCamState() :
+              xbee.sndXbeeMsg(address[0], 'CR')
 
 
     #check if recording and keep going as long as recording is happening.
