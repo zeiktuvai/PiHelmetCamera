@@ -102,7 +102,8 @@ class pycamera :
         self.camera.start_recording(os.path.join(self.VIDEO_PATH,filename + '.h264'), format='h264', bitrate=self.VIDEO_BITRATE)
         # kick off subprocess for recording audio
         self.p = subprocess.Popen(record, stdout=subprocess.PIPE)
-        return True
+        state = True
+        return state
 
 
     def stopCamRec(self) :
@@ -123,6 +124,7 @@ class pycamera :
 
 
 #cam = pycamera('/home/pi/camera',True,25,2,8000000)
+#print(cam.getCamRecord())
 #cam.getCamProperties()
 #print("state " + str(cam.getCamState()))
 #print("recording " + str(cam.getCamRecord()))

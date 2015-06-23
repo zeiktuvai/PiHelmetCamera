@@ -3,19 +3,19 @@
 #description     :Script for controlling raspberry pi camera and audio with GPIO buttons and RF
 #author          :G. Rozzo
 #date            :20150621
-#version         :1.0
+#version         :1.1
 #usage           :
 #notes           :
-#python_version  :3.2  
+#python_version  :2.7  
 #==============================================================================
 
 import RPi.GPIO as GPIO
 import time
-#import os
+import os
 #import datetime
 #import picamera
 import subprocess
-#import signal
+import signal
 import multiprocessing
 from multiprocessing import Queue
 import xbeeRf
@@ -48,7 +48,8 @@ def LED_BLINK(NUM, INTERVAL):
    
 
 def startRecording() :
-    if cam.getCamRecord == False :
+    print(cam.getCamRecord())
+    if cam.getCamRecord() == False :
         if cam.startCamRec() :
             xbee.sndXbeeMsg('\x00\x00','SR')
             LED("ON")
@@ -84,14 +85,6 @@ if cam.getCamState() :
     xbee.sndXbeeMsg('\x00\x00','CR')
 
 
-
-#global KeepGoing
-#KeepGoing = False
-#global recordFlag
-#recordFlag = False
-
-
-
 # Main loop
 while True:
 
@@ -105,13 +98,14 @@ while True:
              stopRecording()
        if cmd == 'cnv' :
           subprocess.call("/home/pi/convert.sh", shell=True)
+          xbee.sndXbeeMsg('\x00\x00','CC')
        if cmd == 'gcp' :
           cam.getCamProperties()
 
 
     #check if recording and keep going as long as recording is happening.
     if GPIO.input(START_BTTN) == False :
-        startRecordin()
+        startRecording()
        
     if cam.getCamRecord() :
         if not cam.waitRecording(2) :
