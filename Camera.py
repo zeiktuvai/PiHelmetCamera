@@ -38,7 +38,6 @@ STOP_BTTN = 20
 LED_PIN = 16
 
 
-
 # setup GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
