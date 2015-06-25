@@ -74,10 +74,10 @@ GPIO.setup(LED_PIN, GPIO.OUT)
 #define xbee information and queue
 port = '/dev/ttyAMA0'
 q = Queue()
-xbee = xbeeRf.xbeeRadio(port,q)
+xbee = xbeeRf.xbeeRadio(port, q)
 
 #define camera
-cam = pymedia.pycamera('/home/pi/camera',True,25,2,8000000)
+cam = pymedia.pycamera('/home/pi/camera/',True,25,2,8000000)
 
 # blink to let you know the camera is ready
 if cam.getCamState() :
@@ -91,10 +91,10 @@ while True:
 
     if not q.empty() :
        cmd = q.get()
-       if cmd == 'StR' :
-          #call start function.
+       print(cmd)
+       if cmd == 'str' :
           startRecording()          
-       if cmd == 'SpR' :
+       if cmd == 'spr' :
           if cam.getCamRecord() :
              stopRecording()
        if cmd == 'cnv' :
