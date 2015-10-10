@@ -53,8 +53,9 @@ class pycamera :
     def getCamProperties(self) :
         properties = [self.VIDEO_RESOLUTION, self.VIDEO_FRAMERATE, self.VIDEO_BITRATE, self.VIDEO_PATH]
         return properties
- 
 
+
+ 
     #Get state of camera, Returns true if camera object open, false if camera closed.
     def getCamState(self) :
         state = True

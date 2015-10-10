@@ -22,14 +22,21 @@
     <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="button.py" />
     <Compile Include="headcam.py" />
-    <Compile Include="Camera.py" />
     <Compile Include="AudioDev.py" />
+    <Compile Include="OLED.py" />
     <Compile Include="pymedia.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WWIICam\headcamNX.py" />
+    <Compile Include="WWIICam\pybluetooth.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="WWIICam\pymedia.py" />
     <Compile Include="xbeeRf.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="WWIICam\" />
   </ItemGroup>
   <Import Project="$(PtvsTargetsFile)" Condition="Exists($(PtvsTargetsFile))" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="!Exists($(PtvsTargetsFile))" />

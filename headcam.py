@@ -12,6 +12,7 @@
 import RPi.GPIO as GPIO
 import time
 import os
+import glob
 #import datetime
 #import picamera
 import subprocess
@@ -20,6 +21,7 @@ import multiprocessing
 from multiprocessing import Queue
 import xbeeRf
 import pymedia
+import OLED
 
 address = ('\x00\x00',)
 
@@ -46,14 +48,21 @@ def LED_BLINK(NUM, INTERVAL):
        GPIO.output(LED_PIN, False)
        time.sleep(INTERVAL)
        count += 1
+
    
+def video_count() :
+    videos = len(glob.glob1("/home/pi/camera","*.h264"))
+    display.vid_count = videos
+
 
 def startRecording() :
     print(cam.getCamRecord())
     if cam.getCamRecord() == False :
         if cam.startCamRec() :
             xbee.sndXbeeMsg('\x00\x00','SR')
+            display.start_recording()
             LED("ON")
+            video_count()
     time.sleep(1)
     
 
@@ -61,7 +70,17 @@ def stopRecording() :
     if cam.getCamRecord() :
         if cam.stopCamRec() :
             xbee.sndXbeeMsg('\x00\x00','ER')
+            display.stop_recording()
             LED("OFF")
+
+
+#Display Setup
+def update_disp_info() :
+    camprop = cam.getCamProperties()
+    resolution, frame, bit, path = camprop
+    unused, res = resolution
+    display.resolution = str(res)
+    display.framerate = str(frame)
 
 
 # setup GPIO
@@ -77,7 +96,8 @@ q = Queue()
 xbee = xbeeRf.xbeeRadio(port, q)
 
 #define camera
-cam = pymedia.pycamera('/home/pi/camera/',True,25,2,8000000)
+cam = pymedia.pycamera('/home/pi/camera/',False,25,2,8000000)
+display = OLED.OLED()
 
 # blink to let you know the camera is ready
 if cam.getCamState() :
@@ -85,9 +105,13 @@ if cam.getCamState() :
     LED_BLINK(3,.3)
     xbee.sndXbeeMsg('\x00\x00','CR')
 
+video_count()
+update_disp_info()
+
 
 # Main loop
 while True:
+    display.oled_display()
 
     if not q.empty() :
        cmd = q.get()
@@ -114,7 +138,7 @@ while True:
     if cam.getCamRecord() :
         if not cam.waitRecording(2) :
             #error code here
-            print('Error')
+            display.oled_mssg("Error")
 
         # Check state of button, if stop button is pressed stop everything.
         if GPIO.input(STOP_BTTN) == False :      
@@ -131,6 +155,8 @@ while True:
                 if elapsed > 10:
                     LED_BLINK(10,.05)
                     subprocess.call("/home/pi/shutdown.sh", shell=True)
+                    while True:
+                        display.oled_display_shut()
                 time.sleep(0.001)
 
 
